@@ -15,6 +15,7 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -91,6 +92,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function TopBar({ open, handleDrawerOpen, setMode }) {
 
+    const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open2 = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -99,6 +101,18 @@ export default function TopBar({ open, handleDrawerOpen, setMode }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+
+    const handleLogin = () => {
+        setAnchorEl(null);
+        navigate("/login");
+    };
+    const handleRegister = () => {
+        setAnchorEl(null);
+        navigate("/register");
+    };
+
+
 
 
     let theme = useTheme()
@@ -193,8 +207,11 @@ export default function TopBar({ open, handleDrawerOpen, setMode }) {
                             }}
                         >
                             <MenuItem onClick={handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={handleClose}>My account</MenuItem>
-                            <MenuItem onClick={handleClose}>Logout</MenuItem>
+                            {/* <MenuItem onClick={handleClose}>My account</MenuItem> */}
+
+                            <MenuItem onClick={handleLogin}>Login</MenuItem>
+                            <MenuItem onClick={handleRegister}>Register</MenuItem>
+                            {/* <MenuItem onClick={handleClose}>Logout</MenuItem> */}
                         </Menu>
                     </Box>
 
