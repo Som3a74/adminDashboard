@@ -28,6 +28,7 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import { useLocation, useNavigate } from "react-router-dom";
 import { grey } from "@mui/material/colors";
 import Avatar from '@mui/material/Avatar';
+import { useAuth } from './../Context/AuthContext';
 
 // text SideBar
 const Array1 = [
@@ -102,6 +103,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function SideBar({ open, handleDrawerClose }) {
     const theme = useTheme();
     const navigate = useNavigate()
+    const { currentUser } = useAuth();
 
     return (
 
@@ -126,8 +128,8 @@ export default function SideBar({ open, handleDrawerClose }) {
                 src="https://upload.wikimedia.org/wikipedia/commons/7/7f/Emma_Watson_2013.jpg"
             />
 
-            <Typography sx={{ textAlign: 'center', fontSize: open ? 17 : 0, transition: "0.25s" }}>
-                Emma watson
+            <Typography sx={{ textAlign: 'center', fontSize: open ? 14 : 0, transition: "0.25s" }}>
+                {currentUser ? currentUser.email : 'None'}
             </Typography>
 
             <Typography sx={{ textAlign: 'center', fontSize: open ? 15 : 0, transition: "0.25s", color: theme.palette.info.main, }}>

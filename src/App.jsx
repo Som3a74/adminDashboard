@@ -16,9 +16,13 @@ import Form from './Pages/Form/Form';
 import Contacts from './Pages/Contacts/Contacts';
 import NotFound from "./Pages/NotFound/NotFound";
 
+import Register from './Pages/Register/Register';
+// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import Login from "./Pages/Login/Login";
+import ProtectedRoute from "./Context/ProtectedRoute";
 
 export default function App() {
-  
+ 
   const [mode, setMode] = React.useState(localStorage.getItem('myMode') || 'light');
   const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
@@ -27,7 +31,7 @@ export default function App() {
       <Route path="/" element={<Layout setMode={setMode} />}>
 
         <Route index element={<Dashboard />} />
-        <Route path="/team" element={<Team />} />
+        <Route path="/team" element={ <ProtectedRoute><Team /></ProtectedRoute>} />
         <Route path="/contacts" element={<Contacts />} />
         {/* <Route path="/invoices" element={<Invoices />} /> */}
 
@@ -39,6 +43,9 @@ export default function App() {
         <Route path="/pie" element={<Pie />} />
         <Route path="/line" element={<Line />} />
         <Route path="/geography" element={<Geography />} />
+
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         <Route path="*" element={<NotFound />} />
       </Route>
@@ -52,4 +59,3 @@ export default function App() {
     </ThemeProvider>
   )
 }
-
