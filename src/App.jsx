@@ -17,12 +17,13 @@ import Contacts from './Pages/Contacts/Contacts';
 import NotFound from "./Pages/NotFound/NotFound";
 
 import Register from './Pages/Register/Register';
-// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import Login from "./Pages/Login/Login";
 import ProtectedRoute from "./Context/ProtectedRoute";
+import ForgotPassword from './Pages/ForgotPassword/ForgotPassword';
+import UpdateProfile from './Pages/UpdateProfile/UpdateProfile';
 
 export default function App() {
- 
+
   const [mode, setMode] = React.useState(localStorage.getItem('myMode') || 'light');
   const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
@@ -31,11 +32,11 @@ export default function App() {
       <Route path="/" element={<Layout setMode={setMode} />}>
 
         <Route index element={<Dashboard />} />
-        <Route path="/team" element={ <ProtectedRoute><Team /></ProtectedRoute>} />
-        <Route path="/contacts" element={<Contacts />} />
+        <Route path="/team" element={<ProtectedRoute><Team /></ProtectedRoute>} />
+        <Route path="/contacts" element={<ProtectedRoute><Contacts /></ProtectedRoute>} />
         {/* <Route path="/invoices" element={<Invoices />} /> */}
 
-        <Route path="/form" element={<Form />} />
+        <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/faq" element={<Faq />} />
 
@@ -46,6 +47,8 @@ export default function App() {
 
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/ForgotPassword" element={<ForgotPassword />} />
+        {/* <Route path="/UpdateProfile" element={<UpdateProfile />} /> */}
 
         <Route path="*" element={<NotFound />} />
       </Route>

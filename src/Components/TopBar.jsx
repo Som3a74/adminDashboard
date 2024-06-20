@@ -15,7 +15,7 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './../Context/AuthContext';
 
 const drawerWidth = 240;
@@ -84,7 +84,7 @@ export default function TopBar({ open, handleDrawerOpen, setMode }) {
     const [error, setError] = React.useState("");
     const [loading, setLoading] = React.useState(false);
     const navigate = useNavigate()
-    const { logout } = useAuth();
+    const { logout, currentUser } = useAuth();
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open2 = Boolean(anchorEl);
@@ -104,6 +104,11 @@ export default function TopBar({ open, handleDrawerOpen, setMode }) {
     const handleRegister = () => {
         setAnchorEl(null);
         navigate("/register");
+    };
+
+    const handleUpdate = () => {
+        setAnchorEl(null);
+        navigate("/UpdateProfile");
     };
 
     const handleLogOut = async () => {
@@ -212,12 +217,19 @@ export default function TopBar({ open, handleDrawerOpen, setMode }) {
                                 horizontal: 'left',
                             }}
                         >
-                            {/* <MenuItem onClick={handleClose}>Profile</MenuItem> */}
-                            {/* <MenuItem onClick={handleClose}>My account</MenuItem> */}
+                            {
+                                currentUser ?
+                                    <Box>
+                                        {/* <MenuItem disabled={loading} onClick={handleUpdate}>Update Profile</MenuItem> */}
+                                        <MenuItem disabled={loading} onClick={handleLogOut}>Logout</MenuItem>
+                                    </Box>
+                                    : <Box>
+                                        <MenuItem onClick={handleLogin}>Login</MenuItem>
+                                        <MenuItem onClick={handleRegister}>Register</MenuItem>
+                                    </Box>
+                            }
 
-                            <MenuItem onClick={handleLogin}>Login</MenuItem>
-                            <MenuItem onClick={handleRegister}>Register</MenuItem>
-                            <MenuItem disabled={loading} onClick={handleLogOut}>Logout</MenuItem>
+
                         </Menu>
                     </Box>
 

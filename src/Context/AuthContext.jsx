@@ -20,15 +20,16 @@ const AuthProvider = ({ children }) => {
         return signOut(auth);
     };
 
-    // const resetPassword = (email) => {
-    //     return sendPasswordResetEmail(auth, email);
-    // };
-    // const updateUserEmail = (email) => {
-    //     return updateEmail(auth.currentUser, email);
-    // };
-    // const updateUserPassword = (password) => {
-    //     return updatePassword(auth.currentUser, password);
-    // };
+    const resetPassword = (email) => {
+        return sendPasswordResetEmail(auth, email);
+    };
+
+    const updateUserEmail = (email) => {
+        return updateEmail(auth.currentUser, email);
+    };
+    const updateUserPassword = (password) => {
+        return updatePassword(auth.currentUser, password);
+    };
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -39,6 +40,7 @@ const AuthProvider = ({ children }) => {
             unsubscribe();
         };
     }, []);
+
     return (
         <AuthContext.Provider
             value={{
@@ -46,9 +48,9 @@ const AuthProvider = ({ children }) => {
                 signup,
                 login,
                 logout,
-                // resetPassword,
-                // updateUserEmail,
-                // updateUserPassword,
+                resetPassword,
+                updateUserEmail,
+                updateUserPassword,
             }}
         >
             {!loading && children}

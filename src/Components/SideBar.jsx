@@ -125,7 +125,9 @@ export default function SideBar({ open, handleDrawerClose }) {
                     transition: "0.25s",
                 }}
                 alt="Remy Sharp"
-                src="https://upload.wikimedia.org/wikipedia/commons/7/7f/Emma_Watson_2013.jpg"
+                src={currentUser ?
+                    "https://upload.wikimedia.org/wikipedia/commons/7/7f/Emma_Watson_2013.jpg" :
+                    "https://iptc.org/wp-content/uploads/2018/05/avatar-anonymous-300x300.png"}
             />
 
             <Typography sx={{ textAlign: 'center', fontSize: open ? 14 : 0, transition: "0.25s" }}>

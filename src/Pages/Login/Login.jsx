@@ -13,7 +13,7 @@ export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
   const location = useLocation();
-  const redirectPath = location.state?.path || "/Bar";
+  const redirectPath = location.state?.path || "/Team";
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -41,11 +41,11 @@ export default function Login() {
         <TextField ref={passwordRef} type='password' label="Password" variant="filled" sx={{ display: 'block', margin: '10px', paddingRight: '20px' }} fullWidth />
 
         <Button type="submit" disabled={loading} sx={{ mt: 2, width: '100%', fontWeight: '600' }} variant="contained">Log In</Button>
+        <Typography textAlign={'center'} mt={2} ><Link className='Link_Form' to="/ForgotPassword">Forget password</Link></Typography>
 
       </Paper>
 
       <Typography mt={2} >Already have an account? <Link className='Link_Form' to="/register">Register</Link></Typography>
-
     </Box>
   )
 }
