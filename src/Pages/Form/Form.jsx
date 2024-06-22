@@ -6,12 +6,14 @@ import { Alert, Button, MenuItem, Snackbar, Stack } from '@mui/material';
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
+import { doc, collection, addDoc } from "firebase/firestore";
+import { db } from './../../firebase';
 
 const data = [
-  {
-    value: "Admin",
-    label: "Admin",
-  },
+  // {
+  //   value: "Admin",
+  //   label: "Admin",
+  // },
   {
     value: "Manger",
     label: "Manger",
@@ -23,12 +25,12 @@ const data = [
 ];
 
 const schema = yup.object({
-  firstName: yup.string().required('firstName is Required').min(3, 'min is 3').max(10, 'max is 10'),
-  lastName: yup.string().required('lastName is Required').min(3, 'min is 3').max(10, 'max is 10'),
+  firstName: yup.string().required('firstName is Required').min(3, 'min is 3').max(20, 'max is 20'),
+  Age: yup.string().required('Age is Required').min(1, 'min is 1').max(2, 'max is 3'),
   email: yup.string().required('email is Required').email('email is invalid'),
+  password: yup.string().required('password is Required').min(6, 'min is 6'),
   contactNumber: yup.string().required('phone is required').matches(/^01[0125][0-9]{8}$/, 'is not a egyption phone'),
   Adress1: yup.string().required('Adress is Required'),
-  Adress2: yup.string().required('Adress is Required'),
   Role: yup.string().required('Role is Required')
 }).required()
 
@@ -37,7 +39,7 @@ export default function Form() {
   const { register, handleSubmit, watch, formState: { errors }, } = useForm({ resolver: yupResolver(schema), })
   const [open, setOpen] = React.useState(false);
 
-  
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -50,12 +52,17 @@ export default function Form() {
 
 
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    setOpen(true);
     console.log(data)
+
+    const newDocRef = doc(collection(db, "Users"));
+    data.id = newDocRef.id;
+    await addDoc(collection(db, "Users"), data);
+
     handleClick()
   }
 
-  console.log(watch("example")) // watch input value by passing the name of it
 
   return (
     <Box>
@@ -71,10 +78,10 @@ export default function Form() {
           />
 
           <TextField
-            error={Boolean(errors.lastName)}
-            helperText={Boolean(errors.lastName) && errors.lastName?.message}
-            {...register("lastName")}
-            sx={{ flex: 1 }} label="Last Name" variant="filled"
+            error={Boolean(errors.Age)}
+            helperText={Boolean(errors.Age) && errors.Age?.message}
+            {...register("Age")}
+            sx={{ flex: 1 }} label="Age" type='number' variant="filled"
           />
         </Stack>
 
@@ -83,6 +90,13 @@ export default function Form() {
           helperText={Boolean(errors.email) && errors.email?.message}
           {...register("email")}
           sx={{ flex: 1 }} label="Email" variant="filled"
+        />
+
+        <TextField
+          error={Boolean(errors.password)}
+          helperText={Boolean(errors.password) && errors.password?.message}
+          {...register("password")}
+          sx={{ flex: 1 }} label="password" type='password' variant="filled"
         />
 
         <TextField
@@ -97,12 +111,6 @@ export default function Form() {
           helperText={Boolean(errors.Adress1) && errors.Adress1?.message}
           {...register("Adress1")}
           label="Adress 1" variant="filled"
-        />
-        <TextField
-          error={Boolean(errors.Adress2)}
-          helperText={Boolean(errors.Adress2) && errors.Adress2?.message}
-          {...register("Adress2")}
-          label="Adress 2" variant="filled"
         />
 
         <TextField sx={{ flex: 1 }}
@@ -120,7 +128,7 @@ export default function Form() {
 
 
         <Box sx={{ textAlign: "right" }}>
-          <Button type="submit" sx={{ textTransform: "capitalize" }} variant="contained">
+          <Button disabled={open} type="submit" sx={{ textTransform: "capitalize" }} variant="contained">
             Create New User
           </Button>
 
