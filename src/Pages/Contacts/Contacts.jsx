@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid, GridToolbar, GridActionsCellItem } from "@mui/x-data-grid";
-import { Box } from "@mui/material";
-// import { columns } from "../../utils/ContactsData";
+import { Box, Button, Typography } from "@mui/material";
 import Header from './../../Components/Header';
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from './../../firebase';
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import CircularProgress from '@mui/material/CircularProgress';
-
-
-
+import Loading from './../Loading/Loading';
+import useCheckAdmin from "../../utils/checkAdmin";
 
 
 export default function Contacts() {
   const [DataFireBase, setDataFireBase] = useState(null)
+  const [loadingDlt, setloadingDlt] = useState(null)
 
   const handleDeleteClick = (id) => async () => {
     let IdDelete = ''
@@ -22,14 +20,18 @@ export default function Contacts() {
         IdDelete = docs.IdDoc
       }
     })
-    console.log(IdDelete)
+    // console.log(IdDelete)
     try {
+      setloadingDlt(true)
       await deleteDoc(doc(db, "Users", IdDelete))
       setDataFireBase(DataFireBase.filter((DataFireBase) => DataFireBase.id !== id));
     } catch (error) {
       console.log(error);
     }
+    setloadingDlt(false)
   };
+
+  const isAdmin = useCheckAdmin();
 
   async function GetData() {
     const allDocs = [];
@@ -38,7 +40,6 @@ export default function Contacts() {
       allDocs.push({ ...doc.data(), IdDoc: doc.id });
     });
     setDataFireBase(allDocs);
-    console.log(allDocs)
   }
 
   useEffect(() => {
@@ -96,10 +97,11 @@ export default function Contacts() {
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
+            disabled={loadingDlt}
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(id)}
-            color="inherit"
+            color="#ffff"
           />
         ];
       }
@@ -112,13 +114,14 @@ export default function Contacts() {
       {DataFireBase ?
         <Box>
           <Box sx={{ height: 650, width: "99%", mx: "auto" }}>
-            <DataGrid checkboxSelection slots={{ toolbar: GridToolbar, }} rows={DataFireBase} columns={columns} editMode="row" />
+            {
+              isAdmin ? <DataGrid checkboxSelection slots={{ toolbar: GridToolbar, }} rows={DataFireBase} columns={columns} editMode="row" />
+                : <Typography textAlign={'center'} variant="h3" mt={10}>You should be An admin</Typography>
+            }
           </Box>
         </Box>
         :
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height:'50vw' }}>
-          <CircularProgress />
-        </Box>
+        <Loading />
       }
     </>
   )

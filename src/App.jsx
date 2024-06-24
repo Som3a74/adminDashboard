@@ -37,7 +37,7 @@ export default function App() {
         {/* <Route path="/invoices" element={<Invoices />} /> */}
 
         <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
-        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
         <Route path="/faq" element={<Faq />} />
 
         <Route path="/bar" element={<Bar />} />

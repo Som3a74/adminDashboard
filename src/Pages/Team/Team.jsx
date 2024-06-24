@@ -1,26 +1,43 @@
-import * as React from 'react';
+import React, { useEffect, useState } from "react";
 import { DataGrid } from '@mui/x-data-grid';
 import { useTheme } from "@mui/material";
 import { Box, Typography } from "@mui/material";
 import { AdminPanelSettingsOutlined, LockOpenOutlined, SecurityOutlined } from "@mui/icons-material";
-import { rows } from './../../utils/TeamData';
 import Header from './../../Components/Header';
-
-
+import { collection, getDocs } from "firebase/firestore";
+import { db } from './../../firebase';
+import Loading from './../Loading/Loading';
+import useCheckAdmin from "../../utils/checkAdmin";
 
 
 export default function Team() {
   const theme = useTheme();
+  const [DataFireBase, setDataFireBase] = useState(null)
+
+  const isAdmin = useCheckAdmin();
+
+  async function GetData() {
+    const allDocs = [];
+    const querySnapshot = await getDocs(collection(db, "Roles"));
+    querySnapshot.forEach((doc) => {
+      allDocs.push({ ...doc.data(), IdDoc: doc.id });
+    });
+    setDataFireBase(allDocs);
+  }
+
+  useEffect(() => {
+    GetData()
+  }, [])
 
   const columns = [
-    { field: "id", headerName: "ID", width: 33, align: "center", headerAlign: "center", },
-    { field: "name", headerName: "name", align: "center", headerAlign: "center", },
+    { field: "id", headerName: "ID", width: 55, align: "center", headerAlign: "center", },
+    { field: "firstName", headerName: "name", align: "center", headerAlign: "center", },
     { field: "email", headerName: "email", flex: 1, align: "center", headerAlign: "center", },
-    { field: "age", headerName: "age", align: "center", headerAlign: "center" },
-    { field: "phone", headerName: "phone", flex: 1, align: "center", headerAlign: "center", },
+    { field: "contactNumber", headerName: "phone", flex: 1, align: "center", headerAlign: "center", },
     {
-      field: "access", headerName: "access", flex: 1, align: "center", headerAlign: "center",
-      renderCell: ({ row: { access } }) => {
+      field: "role", headerName: "access", flex: 1, cellClassName: "cellstyle", headerAlign: "center",
+      renderCell: ({ row: { role } }) => {
+        // console.log(role)
         return (
           <Box
             sx={{
@@ -30,24 +47,25 @@ export default function Team() {
               textAlign: "center",
               display: "flex",
               justifyContent: "space-evenly",
+              alignItems: 'center',
 
               backgroundColor:
-                access === "Admin" ? theme.palette.primary.dark
-                  : access === "Manager" ? theme.palette.secondary.dark : "#3da58a",
+                role === "Admin" ? theme.palette.primary.dark
+                  : role === "Manager" ? theme.palette.secondary.dark : "#3da58a",
             }}
           >
-            {access === "Admin" && (
+            {role === "Admin" && (
               <AdminPanelSettingsOutlined sx={{ color: "#fff" }} fontSize="small" />
             )}
-            {access === "Manager" && (
+            {role === "Manager" && (
               <SecurityOutlined sx={{ color: "#fff" }} fontSize="small" />
             )}
-            {access === "User" && (
+            {role === "User" && (
               <LockOpenOutlined sx={{ color: "#fff" }} fontSize="small" />
             )}
 
             <Typography sx={{ fontSize: "13px", color: "#fff" }}>
-              {access}
+              {role}
             </Typography>
           </Box>
         );
@@ -58,10 +76,14 @@ export default function Team() {
   return (
     <>
       <Header title="TEAM" subTitle="Managing the Team Members" />
-
-      <Box sx={{ height: 600, width: '98%' }}>
-        <DataGrid checkboxSelection rows={rows} columns={columns} />
-      </Box>
+      {DataFireBase ?
+        <Box sx={{ height: 600, width: '98%' }}>
+          {
+            isAdmin ? <DataGrid rows={DataFireBase} columns={columns} />
+              : <Typography textAlign={'center'} variant="h3" mt={10}>You should be An admin</Typography>
+          }
+        </Box>
+        : <Loading />}
     </>
   )
 }
