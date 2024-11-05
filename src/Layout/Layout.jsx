@@ -2,7 +2,6 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
 import TopBar from './../Components/TopBar';
 import SideBar from './../Components/SideBar.jsx';
 import { Outlet } from 'react-router-dom';
@@ -19,6 +18,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 
+// eslint-disable-next-line react/prop-types
 export default function Layout({ setMode }) {
 
     const [open, setOpen] = React.useState(false);

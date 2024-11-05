@@ -25,9 +25,9 @@ import { grey } from "@mui/material/colors";
 import Avatar from '@mui/material/Avatar';
 import { useAuth } from './../Context/AuthContext';
 import useCheckAdmin from '../utils/checkAdmin';
-import UserImg from '../../public/image/User.jpeg'
-import anonymousImg from '../../public/image/anonymous.png'
-import managerImg from '../../public/image/manager.png'
+import UserImg from '../../public/image/User.webp'
+import anonymousImg from '../../public/image/anonymous.webp'
+import managerImg from '../../public/image/manager.webp'
 
 // text SideBar
 const Array1 = [
@@ -98,18 +98,20 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 
+// eslint-disable-next-line react/prop-types
 export default function SideBar({ open, handleDrawerClose }) {
     const theme = useTheme();
     const navigate = useNavigate()
     const { currentUser } = useAuth();
     const isAdmin = useCheckAdmin();
+    const avatarSrc = currentUser ? (isAdmin ? managerImg : UserImg) : anonymousImg;
 
     return (
 
         <Drawer variant="permanent" open={open}>
 
             <DrawerHeader>
-                <IconButton onClick={handleDrawerClose}>
+                <IconButton aria-label="Burgur Button" onClick={handleDrawerClose}>
                     {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                 </IconButton>
             </DrawerHeader>
@@ -124,8 +126,21 @@ export default function SideBar({ open, handleDrawerClose }) {
                     transition: "0.25s",
                 }}
                 alt={currentUser ? (isAdmin ? "manager" : "User") : "anonymous"}
-                src={currentUser ? (isAdmin ? managerImg : UserImg) : anonymousImg}
-            />
+            >
+                <img
+                    srcSet={
+                        currentUser
+                            ? isAdmin
+                                ? `${managerImg} 44w, ${managerImg} 88w`
+                                : `${UserImg} 44w, ${UserImg} 88w`
+                            : `${anonymousImg} 44w, ${anonymousImg} 88w`
+                    }
+                    loading="lazy"
+                    alt={currentUser ? (isAdmin ? "manager" : "User") : "anonymous"}
+                    style={{ width: '100%', height: '100%' }}
+                />
+            </Avatar>
+
 
             <Typography sx={{ textAlign: 'center', fontSize: open ? 14 : 0, transition: "0.25s" }}>
                 {currentUser ? currentUser?.email : 'None'}

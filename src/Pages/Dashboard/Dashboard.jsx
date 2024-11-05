@@ -1,15 +1,13 @@
-import React from 'react'
 import Row1 from "./Row1";
 import Row2 from "./Row2";
 import Row3 from "./Row3";
 import { Button } from '@mui/material'
 import Header from './../../Components/Header';
 import { DownloadOutlined } from '@mui/icons-material';
-import { Box, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import html2canvas from "html2canvas";
 
 export default function Dashboard() {
-  const theme = useTheme();
 
   const handleDownloadScreenshot = async () => {
     const element = document.body; // Change this to the specific element you want to screenshot
@@ -40,7 +38,7 @@ export default function Dashboard() {
       <Header title="DASHBOARD" subTitle="Welcome to your dashboard" />
 
       <Box sx={{ textAlign: "right", mb: 1.3 }}>
-        <Button onClick={handleDownloadScreenshot} color="primary" sx={{ padding: "6px 8px", fontWeight: '800', textTransform: "capitalize" }} variant="contained"> <DownloadOutlined /> Download Reports</Button>
+        <Button aria-label='button screenshot' onClick={handleDownloadScreenshot} color="primary" sx={{ padding: "6px 8px", fontWeight: '800', textTransform: "capitalize" }} variant="contained"> <DownloadOutlined /> Download Reports</Button>
       </Box>
 
     </Stack>

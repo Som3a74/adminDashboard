@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, Paper, Stack, Typography, useTheme, IconButton } from "@mui/material";
 import { DownloadOutlined } from '@mui/icons-material';
 import LineChartComponent from '../../Components/LineChartComponent';
@@ -16,7 +15,7 @@ export default function Row2() {
             <Typography variant="body2" ml={4}> $59,342.32</Typography>
           </Box>
 
-          <IconButton sx={{ mr: 3 }}> <DownloadOutlined /> </IconButton>
+          <IconButton aria-label='button screenshot' sx={{ mr: 3 }}> <DownloadOutlined /> </IconButton>
         </Stack>
 
         <LineChartComponent left={false} bottom={false} heightLine="280px" />
